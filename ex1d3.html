@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Random Diet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Long+Cang&display=swap" rel="stylesheet">
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Long Cang', cursive;
+            font-weight: bolder;
+            text-shadow: 0px 0px 1px rgb(225, 0, 255);
+        }
+
+        header {
+            background-color: lightgrey;
+            font-size: 300%;
+        }
+
+        main {
+            display: block;
+            flex-wrap: wrap;
+            background-color: bisque;
+        }
+
+        #conteudo{
+            display: flex;
+            flex-wrap: wrap;
+
+        }
+
+        img{
+            width: 40%;
+            border-radius: 5px;
+            border: 2px solid yellow;
+        }
+
+        #comida{
+            border: 2px solid green;
+            margin: 20px;
+            padding: 10px;
+            font-size: 135%;
+            text-align: center;
+            background-image: url("https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/small-kitchen-1572367025.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            border-radius: 12px;
+        }
+
+        #bg{
+            background-color: rgb(255, 200, 200, 0.5);
+            border: 2px solid black;
+            padding: 20px;
+            font-family: 'Long Cang', cursive;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <header align="center">
+        RandomDiet.io
+    </header>
+
+    <main>
+        <div align="center">Receitas para a Semana</div>
+        <div id="conteudo"></div>
+    </main>
+    
+    <script>
+        for (let i = 0; i < 7; i++) {
+            fetch("https://www.themealdb.com/api/json/v1/1/random.php")
+                .then(res => res.json())
+                .then(json => {
+                    var ingredientes = [json.meals[0].strIngredient1 + ' - ' + json.meals[0].strIngredient2 +' - ' + json.meals[0].strIngredient3 + ' - ' +json.meals[0].strIngredient4 + ' - ' +json.meals[0].strIngredient5  + ' - ' +json.meals[0].strIngredient6  + ' - ' +json.meals[0].strIngredient7 + ' - ' +json.meals[0].strIngredient8 + ' - ' +json.meals[0].strIngredient9  + ' - ' +json.meals[0].strIngredient10  + ' - ' +json.meals[0].strIngredient11  + ' - ' +json.meals[0].strIngredient12  + ' - ' +json.meals[0].strIngredient13 + ' - ' +json.meals[0].strIngredient14 + ' - ' +json.meals[0].strIngredient15 + ' - ' +json.meals[0].strIngredient16 + ' - ' +json.meals[0].strIngredient17 + ' - ' +json.meals[0].strIngredient18 + ' - ' +json.meals[0].strIngredient19 + ' - ' +json.meals[0].strIngredient20]
+                    console.log(json)
+                    document.getElementById("conteudo").innerHTML +=
+                        `<div id="comida"><div id="bg"><img src="${json.meals[0].strMealThumb}"><p>${json.meals[0].strMeal}</p><p>Id: ${json.meals[0].idMeal}</p><p>Ingredientes: ${ingredientes}</p><p>Modo de Preparo: ${json.meals[0].strInstructions}</p></div></div>`
+                })
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIPE API</title>
+    <style type="text/css">
+        * {
+          margin: 0;
+          padding: 0;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            background-color: lightgreen;
+        }
+
+        select {
+            width: 174px;
+            margin-bottom: 10px;
+        }
+
+        header {
+            padding-bottom: 20px;
+            padding-top: 20px;
+            background-color: lightgrey;
+            width: 100%;
+            margin-bottom: 50px;
+        }
+
+        #conteudo{
+            background-color: lightblue;
+            height: 38.7vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main align="center">
+        <header>Tabela Fipe</header>
+        <label for="">Selecione o Tipo do Veículo</label>
+        <select class="input" name="" id="tipo" onchange="callMarca()">
+            <option id="carros" value="carros" selected>Carros</option>
+            <option id="motos" value="motos">Motos</option>
+            <option if="caminhoes" value="caminhoes">Caminhões</option>
+        </select>
+        <label for="marca">Marca</label>
+        <select id="marca" onchange="callCodigo()">
+        </select>
+        <label for="codigo">Modelo</label>
+        <select id="codigo" onchange="callAno()">
+        </select>
+        <label for="ano">Ano</label>
+        <select id="ano">
+        </select>
+        <button type="submit" onclick="final()">Pesquisar</button><br>
+    </main>
+
+    <div id="conteudo" align="center"></div>
+
+
+    <script>
+        document.getElementById("conteudo").innerHTML = ""
+        var tipo = document.getElementById("tipo").value;
+        var codigo = document.getElementById("codigo").value;
+        var marca
+        var modelo
+
+        function callMarca() {
+
+            fetch(`https://parallelum.com.br/fipe/api/v1/${tipo}/marcas`)
+                .then(res => res.json())
+                .then(json => {
+                    for (let i = 0; i < json.length; i++)
+                        document.getElementById("marca").innerHTML +=
+                        `<option id="${json[i].codigo}" value="${json[i].codigo}">${json[i].nome}</option>`
+                })
+        }
+
+        function callCodigo() {
+            marca = document.getElementById("marca").value;
+            fetch(`https://parallelum.com.br/fipe/api/v1/${tipo}/marcas/${marca}/modelos`)
+                .then(res => res.json())
+                .then(json1 => {
+                    for (let i = 0; i < json1.modelos.length; i++)
+                        document.getElementById("codigo").innerHTML +=
+                        `<option id="${json1.modelos[i].codigo}" value="${json1.modelos[i].codigo}">${json1.modelos[i].nome}</option>`
+                })
+        }
+
+        function callAno() {
+            modelo = document.getElementById("codigo").value
+            fetch(`https://parallelum.com.br/fipe/api/v1/${tipo}/marcas/${marca}/modelos/${modelo}/anos`)
+                .then(res => res.json())
+                .then(json2 => {
+                    for (let i = 0; i < json2.length; i++)
+                        document.getElementById("ano").innerHTML +=
+                        `<option id="${json2[i].codigo}" value="${json2[i].codigo}">${json2[i].nome}</option>`
+                })
+        }
+
+        function final() {
+            var ano = document.getElementById("ano").value;
+            fetch(`https://parallelum.com.br/fipe/api/v1/${tipo}/marcas/${marca}/modelos/${modelo}/anos/${ano}`)
+                .then(res => res.json())
+                .then(json3 => {
+                    document.getElementById("conteudo").innerHTML +=
+                        `<div>Marca: ${json3.Marca}<br>Modelo: ${json3.Modelo}<br> ${json3.Valor}</div>`
+                })
+        }
+    </script>
+</body>
+
+</html>
